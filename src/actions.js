@@ -7,7 +7,7 @@ import $ from 'jquery';
 let ActionTypes = ChatConstants.ActionTypes;
 
 export function createMessage(text, currentThreadID) {
-  let message = ChatMessageUtils.getCreatedMessageData(text, currentThreadID);
+  let message = ChatMessageUtils.getCreatedMessageData(text, 't_1');
   ChatAppDispatcher.dispatch({
     type: ActionTypes.CREATE_MESSAGE,
     message
@@ -51,21 +51,40 @@ export function createSTATUSMessage(createdMessage, currentThreadID) {
     websearchresults:[],
     date: new Date(timestamp),
     isRead: true,
+    image:'',
+    suggestions:[],
+    tags:[]
   };
+  createdMessage.text=createdMessage.text.toLowerCase();
   // Ajax Success calls the Dispatcher to CREATE_STATUS_MESSAGE
   $.ajax({
-    url: 'http://cors-anywhere.herokuapp.com/http://139.59.78.99:8000/chat?message='+createdMessage.text,
+    url: 'http://cors-anywhere.herokuapp.com/http://139.59.21.68:8001/chat?message='+createdMessage.text,
     crossDomain: true,
     timeout: 3000,
     async: false,
+    dataType:'json',
     success: function (response) {
       console.log(response);
-        response = JSON.stringify(response);
         receivedMessage.text = response.message;
-        receivedMessage.response = response;
+        receivedMessage.image ='';
+        if(response.message==="I'm so sorry but I couldn't get you."){
+          receivedMessage.image = 'images/sad.png';
+        }
+        if(response.suggestions){
+          receivedMessage.suggestions = response.suggestions;
+        }
+        else{
+          receivedMessage.suggestions = [];
+        }
+        if(response.tags){
+          receivedMessage.tags = response.tags;
+        }
+        else{
+          receivedMessage.tags = [];
+        }
+        console.log(message);
           let message =  ChatMessageUtils.getStatusMessageData(
             receivedMessage, currentThreadID);
-
           ChatAppDispatcher.dispatch({
             type: ActionTypes.CREATE_STATUS_MESSAGE,
             message
@@ -73,7 +92,35 @@ export function createSTATUSMessage(createdMessage, currentThreadID) {
       },
     error: function(errorThrown) {
       console.log(errorThrown);
-      receivedMessage.text = 'Please check your internet connection';
+      receivedMessage.image ='/images/globe.png'
+      receivedMessage.text = "I'm so sorry but I couldn't get you.";
+      receivedMessage.image = 'images/sad.png';
+      let message =  ChatMessageUtils.getStatusMessageData(
+        receivedMessage, currentThreadID);
+      ChatAppDispatcher.dispatch({
+        type: ActionTypes.CREATE_STATUS_MESSAGE,
+        message
+      });
     }
   });
 };
+
+export function getHistory(){
+  let receivedMessage =
+    {
+      id: 'm_2',
+      threadID: 't_1',
+      threadName: 'Status',
+      authorName: 'Status',
+      text:'Hi there what can I do for you today!',
+      timestamp: Date.now() - 89999,
+      image:'/images/status200.svg',
+      suggestions:['Show active servers','Create a server']
+    };
+    let message =  ChatMessageUtils.getStatusMessageData(
+      receivedMessage, 't_1');
+    ChatAppDispatcher.dispatch({
+      type: ActionTypes.CREATE_STATUS_MESSAGE,
+      message
+    });
+}

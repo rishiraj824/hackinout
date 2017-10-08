@@ -46,8 +46,13 @@ export default class MessageSection extends Component {
         <div>
           <header className="message-thread-heading">
             <nav>
-              <img src='/images/status200.svg' alt='status200'/>
+              <img src='/images/globe.png' alt='status200'/>
               <h1>Status 200</h1>
+              <span style={{
+                textAlign: 'right',
+                marginLeft: '20px',
+                lineHeight: '50px'
+              }}> <a href='http://github.com/winuall/testing'>Active project: Winuall</a></span>
             </nav>
           </header>
           <div className="message-pane">

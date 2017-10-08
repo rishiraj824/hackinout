@@ -13,6 +13,7 @@ import {
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import { divIcon } from 'leaflet';
 import Paper from 'material-ui/Paper';
+import * as Actions from '../actions';
 
 export function parseAndReplace(text) {
   return <Linkify properties={{target: '_blank'}}>
@@ -151,6 +152,7 @@ function drawMap(lat,lng,zoom){
   );
   return map;
 }
+let suggestions;
 
 class ExtendedMarker extends Marker {
 
@@ -160,13 +162,47 @@ class ExtendedMarker extends Marker {
     this.leafletElement.openPopup();
   }
 }
-
 class MessageListItem extends React.Component {
 
+  sendMessage=(suggestion)=>{
+    if(suggestions[0]!==''){
+    Actions.createMessage(suggestions[0],{threadID: "t_1"});
+  }
+    suggestions = [];
+  }
+  constructor(props){
+    super(props);
+    this.sendMessage = this.sendMessage.bind(this);
+  }
   render() {
     let {message} = this.props;
     let stringWithLinks = this.props.message.text;
     let replacedText = '';
+    let image  = this.props.message.image;
+    let tags = this.props.message.tags;
+    let messageFooter;
+    if(tags!==undefined){
+
+        if(tags.indexOf('github')!==-1) {
+       messageFooter =  <span><i className='fa fa-github'></i>&nbsp;Github&nbsp;&nbsp;</span>
+      }
+      else if(tags.indexOf('do')!==-1) {
+        messageFooter =  <span className='blue-do'><i className='fa fa-cloud '></i>&nbsp;Digital Ocean&nbsp;&nbsp;</span>
+      }
+    }
+    suggestions = this.props.message.suggestions;
+    let suggestionMessages;
+    if(suggestions!==undefined){
+      suggestionMessages = suggestions.map((suggestion,i)=>{
+        return  <section key={i} onClick={this.sendMessage.bind(suggestion[i])} className='message-container You'>
+
+          <div className='message-text'>{suggestion}</div>
+          {/*}<div className='message-time'>
+            {message.date.toLocaleTimeString()}
+          </div>*/}
+          </section>
+      })
+    }
     if(stringWithLinks){
        let imgText = imageParse(stringWithLinks);
        replacedText = parseAndReplace(imgText);
@@ -230,14 +266,28 @@ class MessageListItem extends React.Component {
     }
 
     return (
-      <li className='message-list-item'>
+      <span>
+      <li className='message-list-item fadeInUp'>
         <section  className={messageContainerClasses}>
+
         <div className='message-text'>{replacedText}</div>
+        <div className='message-image'>
+          <img src={image} alt={image}/>
+        </div>
+        <div className='message-footer'>
+          {messageFooter}
+        </div>
         {/*}<div className='message-time'>
           {message.date.toLocaleTimeString()}
         </div>*/}
         </section>
       </li>
+      {suggestions!==undefined&&suggestions.length!==0?
+      <span><br/>
+      <span className='suggestions'>Suggestions:</span><li className='fadeInUp message-list-item flex-display'>
+        {suggestionMessages}
+      </li></span>:''}
+    </span>
     );
   }
 

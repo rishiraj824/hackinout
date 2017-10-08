@@ -26,12 +26,13 @@ export function getStatusMessageData(message, currentThreadID) {
     threadID: currentThreadID,
     authorName: 'Status', // hard coded for the example
     text: message.text,
-    response: message.response,
     actions: message.actions,
     websearchresults: message.websearchresults,
     date: new Date(timestamp),
     isRead: true,
-    responseTime: message.responseTime
+    image:message.image,
+    suggestions:message.suggestions,
+    tags:message.tags
   };
 
   return receivedMessage;

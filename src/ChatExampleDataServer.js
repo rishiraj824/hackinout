@@ -6,8 +6,9 @@ let messages = [
     threadID: 't_1',
     threadName: 'Status',
     authorName: 'Status',
-    text:null,
-    timestamp: Date.now() - 89999
+    text:'Hi there what can I do for you today!',
+    timestamp: Date.now() - 89999,
+    image:'/images/status200.svg'
   }];
 
 let threadNameMap = (function () {

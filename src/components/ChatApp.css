@@ -1,10 +1,38 @@
-
+@import 'https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css';
+@import 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.css';
 .chatapp {
   max-width: 760px;
   margin: 20px auto;
   overflow: hidden;
 }
+.message-container.Status>.message-image img{
+  max-width: 100px;
+  margin:8px 0;
+}
+.message-container.Status>.message-image {
+    padding-right: 16px;
+    font-weight: 300;
+}
+.suggestions{
 
+    text-align: right;
+    width: 97%;
+    display: block;
+}
+.blue-do{
+  color: #2982f7;
+}
+.flex-display{
+  display: flex;
+  justify-content: flex-end;
+}
+.flex-display section{
+  margin : 5px 10px;
+  cursor: pointer;
+}
+.message-container.You>.message-image {
+    display: none;
+}
 .message-list {
   background: #f1f1f1;
   position: fixed;
@@ -84,6 +112,7 @@ header{
 
 .message-list-item, .thread-list-item {
   display: flex;
+  transition: all ease-in 0.3s;
 }
 
 .thread-list:hover .thread-list-item:hover {
@@ -227,6 +256,7 @@ textarea {
     border-radius: 20px;
     margin-left: auto;
     margin-right: 12px;
+    transition: all ease-in 0.3s;
 }
 .websearchtile{
   width: 100%;

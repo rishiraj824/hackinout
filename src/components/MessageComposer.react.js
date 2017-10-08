@@ -13,6 +13,7 @@ class MessageComposer extends Component {
   }
   componentDidMount(){
     this.nameInput.focus();
+    console.log(this.props);
   }
   render() {
     return (
